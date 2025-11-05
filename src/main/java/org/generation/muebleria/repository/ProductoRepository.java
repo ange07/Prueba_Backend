@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ProductoRepository extends JpaRepository<Productos,Integer> {
+public interface ProductoRepository extends JpaRepository<Productos,Long> {
     //listar solo productos activos
     List<Productos> findByActivoTrue();
 }

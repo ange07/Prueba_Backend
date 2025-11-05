@@ -22,7 +22,7 @@ public class ProductoService implements IProductoService {
     }
 
     @Override
-    public Productos getProductsById(Integer id) {
+    public Productos getProductsById(Long id) {
         return null;
     }
 
@@ -32,12 +32,12 @@ public class ProductoService implements IProductoService {
     }
 
     @Override
-    public Productos updateProductsById(Integer id, Productos updateProduct) {
+    public Productos updateProductsById(Long id, Productos updateProduct) {
         return null;
     }
 
     @Override
-    public Productos deleteProductsById(Integer id) {
+    public Productos deleteProductsById(Long id) {
         return null;
     }
 }
