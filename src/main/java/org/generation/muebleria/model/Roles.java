@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -27,8 +28,8 @@ public class Roles {
 
     // --- Relación: Un Rol puede tener muchos Usuarios ---
     // La gestionamos aquí para evitar bucles JSON
-    @OneToMany(mappedBy = "rol")
+    @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference // Lado "trasero": no se serializa para evitar bucles
-    private Set<Usuarios> usuarios;
+    private List<Usuarios> usuarios;
 
 }

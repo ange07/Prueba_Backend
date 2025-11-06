@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name="categorias")
@@ -31,13 +31,13 @@ public class Categorias {
 
     // --- Relación: Muchas categorías (hijas) pueden tener una categoría (padre) ---
     @ManyToOne
-    @JoinColumn(name = "id_categoria_padre")
+    @JoinColumn(name = "id_categoria_padre", nullable = false)
     @JsonManagedReference // Lado "principal" de la relación
     private Categorias categoriaPadre;
 
     // --- Relación: Una categoría (padre) puede tener muchas categorías (hijas) ---
-    @OneToMany(mappedBy = "categoriaPadre")
+    @OneToMany(mappedBy = "categoriaPadre", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference // Lado "trasero" para evitar bucles
-    private Set<Categorias> subCategorias;
+    private List<Categorias> subCategorias;
 
 }

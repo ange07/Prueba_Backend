@@ -25,7 +25,7 @@ public class Facturas {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_factura")
-    private Long idFactura; // HAY QUE CHECAR ESTO n la base de datos sale como Int pero es Long
+    private Long idFactura;
 
     @Column(name = "rfc", nullable = false, length = 15)
     private String rfc;
@@ -47,10 +47,9 @@ public class Facturas {
     @Column(name = "fecha_emision", insertable = false, updatable = false)
     private LocalDateTime fechaEmision;
 
-    // AQUI va la relación con Pedidos
-    /* @OneToOne
+    // Relacion uno a uno con pedidos
+    @OneToOne
     @JoinColumn(name = "id_pedido")
     @JsonIgnore
     private Pedidos pedido;
-    */
 }

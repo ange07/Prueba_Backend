@@ -29,4 +29,15 @@ public class DetallesPedido {
 
     @Column(name = "activo", nullable = false)
     private Boolean activo = true;
+
+    //Relacion mucho a uno productos
+    @ManyToOne
+    @JoinColumn(name="id_producto", nullable = false)
+    private Productos productos;
+
+    //Relacion mucho a uno pedidos
+    @ManyToOne
+    @JoinColumn(name="id_pedidos", nullable = false)
+    private Pedidos pedidos;
+
 }

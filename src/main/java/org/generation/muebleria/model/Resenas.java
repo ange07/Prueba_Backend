@@ -34,4 +34,19 @@ public class Resenas {
 
     @Column(name = "activo", nullable = false)
     private Boolean activo = true;
+
+    //Relacion Muchos a Uno productos
+    @ManyToOne
+    @JoinColumn(name = "id_producto", nullable = false)
+    private Productos productos;
+
+    //Relacion Muchos a Uno usuarios
+    @ManyToOne
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Usuarios usuarios;
+
+    //Relacion Muchos a Uno pedidos
+    @ManyToOne
+    @JoinColumn(name = "id_pedido", nullable = false)
+    private Pedidos pedidos;
 }

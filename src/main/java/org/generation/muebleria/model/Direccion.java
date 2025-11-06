@@ -1,10 +1,13 @@
 package org.generation.muebleria.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name="direcciones")
@@ -35,8 +38,19 @@ public class Direccion {
     private String codigoPostal;
     @Column(name = "es_predeterminada", columnDefinition = "TINYINT(1)")
     private Boolean esPredeterminada = false;
+
+    //relacion muchos a uno usuario
+    @ManyToOne
+    @JoinColumn(name="id_usuario", nullable = false)
+    private Usuarios usuarios;
+
+    //relacion uno a muchos con pedidos
+    @OneToMany(mappedBy = "pedidos", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference // Lado "trasero" para evitar bucles
+    private List<Pedidos> pedidos;
 }
 
 enum TipoDireccion {
     ENVIO, FACTURACION, ENVIO_Y_FACTURACION
+
 }
