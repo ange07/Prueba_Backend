@@ -29,7 +29,7 @@ public class Proveedores {
     private String correo;
     @Column(name = "direccion", nullable = false, length = 200)
     private String direccion;
-    @Column(name = "acivo", columnDefinition = "TINYINT(1)")
+    @Column(name = "activo", columnDefinition = "TINYINT(1)")
     private Boolean activo = true;
     @Column(name = "fecha_registro", insertable = false, updatable = false)
     private LocalDateTime fechaRegistro;
