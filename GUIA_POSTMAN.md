@@ -1,4 +1,4 @@
-# GUÍA COMPLETA DE POSTMAN - SISTEMA DE FACTURACIÓN
+# GUÍA COMPLETA DE POSTMAN - SISTEMA DE FACTURACIÓN SIMPLE
 
 ## CONFIGURACIÓN INICIAL
 
@@ -19,14 +19,11 @@ Base: http://localhost:8080/api/facturas
 ### 1. Iniciar la Aplicación Spring Boot
 
 ```bash
-# Opción 1: Con Maven
-./mvnw spring-boot:run
-
-# Opción 2: Con Gradle
-./gradlew bootRun
-
-# Opción 3: Desde IntelliJ/Eclipse
+# Desde IntelliJ IDEA:
 # Run -> Run 'MuebleriaApplication'
+
+# O desde terminal con Gradle:
+./gradlew bootRun
 ```
 
 ### 2. Cargar Datos de Prueba
@@ -41,7 +38,7 @@ Base: http://localhost:8080/api/facturas
 ```bash
 mysql -u root -p
 # Ingresa password: root123
-source /home/user/Prueba_Backend/datos_prueba.sql
+source /ruta/completa/a/Prueba_Backend/datos_prueba.sql
 ```
 
 **Opción B - Cambiar a update (los datos persisten):**
@@ -52,11 +49,9 @@ source /home/user/Prueba_Backend/datos_prueba.sql
 
 ---
 
-## ENDPOINTS DISPONIBLES
+## ENDPOINTS DISPONIBLES (4 TOTALES)
 
-### 📋 ENDPOINTS PARA CLIENTES
-
-#### 1. SOLICITAR FACTURA PARA UN PEDIDO
+### 📋 1. SOLICITAR FACTURA PARA UN PEDIDO
 ```
 POST http://localhost:8080/api/facturas/solicitar
 ```
@@ -85,9 +80,7 @@ Content-Type: application/json
   "subtotal": 17412.07,
   "iva": 2786.93,
   "total": 20199.00,
-  "estadoFactura": "PENDIENTE",
-  "fechaEmision": "2024-11-08T10:30:00",
-  "fechaActualizacion": "2024-11-08T10:30:00"
+  "fechaEmision": "2024-11-08T10:30:00"
 }
 ```
 
@@ -110,13 +103,13 @@ Content-Type: application/json
 ```
 
 **Pedidos disponibles para solicitar factura:**
-- Pedido 3 (Usuario: María López, id=2)
-- Pedido 4 (Usuario: Pedro Ramírez, id=5)
-- Pedido 5 (Usuario: Carlos Martínez, id=3)
+- Pedido 3 (Usuario: María López, id=2) - $20,199
+- Pedido 4 (Usuario: Pedro Ramírez, id=5) - $10,700
+- Pedido 5 (Usuario: Carlos Martínez, id=3) - $3,200
 
 ---
 
-#### 2. OBTENER FACTURAS DE UN USUARIO
+### 📋 2. OBTENER FACTURAS DE UN USUARIO
 ```
 GET http://localhost:8080/api/facturas/usuario/2
 ```
@@ -126,15 +119,12 @@ GET http://localhost:8080/api/facturas/usuario/2
 [
   {
     "idFactura": 1,
-    "idPedido": 1,
     "rfc": "XAXX010101000",
     "razonSocial": "María López Rodríguez",
     "subtotal": 9912.93,
     "iva": 1586.07,
     "total": 11499.00,
-    "estadoFactura": "ENVIADA",
-    "fechaEmision": "2024-11-01T09:00:00",
-    "fechaActualizacion": "2024-11-03T14:30:00"
+    "fechaEmision": "2024-11-01T09:00:00"
   }
 ]
 ```
@@ -146,7 +136,7 @@ GET http://localhost:8080/api/facturas/usuario/2
 
 ---
 
-#### 3. OBTENER FACTURA DE UN PEDIDO ESPECÍFICO
+### 📋 3. OBTENER FACTURA DE UN PEDIDO ESPECÍFICO
 ```
 GET http://localhost:8080/api/facturas/pedido/1
 ```
@@ -155,32 +145,27 @@ GET http://localhost:8080/api/facturas/pedido/1
 ```json
 {
   "idFactura": 1,
-  "idPedido": 1,
   "rfc": "XAXX010101000",
   "razonSocial": "María López Rodríguez",
   "subtotal": 9912.93,
   "iva": 1586.07,
   "total": 11499.00,
-  "estadoFactura": "ENVIADA",
-  "fechaEmision": "2024-11-01T09:00:00",
-  "fechaActualizacion": "2024-11-03T14:30:00"
+  "fechaEmision": "2024-11-01T09:00:00"
 }
 ```
 
 **Pedidos con factura:**
-- Pedido 1 - Factura ENVIADA
-- Pedido 2 - Factura GENERADA
+- Pedido 1 - Tiene factura
+- Pedido 2 - Tiene factura
 
 **Pedidos sin factura:**
 - Pedido 3, 4, 5 - Sin factura (devuelve error 404)
 
 ---
 
-### 🔧 ENDPOINTS PARA ADMINISTRADORES
-
-#### 4. VER TODAS LAS FACTURAS (ADMIN)
+### 📋 4. VER TODAS LAS FACTURAS (ADMIN)
 ```
-GET http://localhost:8080/api/facturas/admin/todas
+GET http://localhost:8080/api/facturas/todas
 ```
 
 **Respuesta Exitosa (200 OK):**
@@ -188,136 +173,30 @@ GET http://localhost:8080/api/facturas/admin/todas
 [
   {
     "idFactura": 1,
-    "idPedido": 1,
     "rfc": "XAXX010101000",
     "razonSocial": "María López Rodríguez",
     "subtotal": 9912.93,
     "iva": 1586.07,
     "total": 11499.00,
-    "estadoFactura": "ENVIADA",
-    "fechaEmision": "2024-11-01T09:00:00",
-    "fechaActualizacion": "2024-11-03T14:30:00"
+    "fechaEmision": "2024-11-01T09:00:00"
   },
   {
     "idFactura": 2,
-    "idPedido": 2,
     "rfc": "MEGA880101A23",
     "razonSocial": "Muebles El Gran Hogar SA de CV",
     "subtotal": 13534.48,
     "iva": 2165.52,
     "total": 15700.00,
-    "estadoFactura": "GENERADA",
-    "fechaEmision": "2024-11-02T11:00:00",
-    "fechaActualizacion": "2024-11-02T16:00:00"
+    "fechaEmision": "2024-11-02T11:00:00"
   }
 ]
-```
-
----
-
-#### 5. VER FACTURAS PENDIENTES (ADMIN)
-```
-GET http://localhost:8080/api/facturas/admin/pendientes
-```
-
-Devuelve solo facturas con `estado_factura = 'PENDIENTE'`
-
----
-
-#### 6. VER FACTURAS GENERADAS (ADMIN)
-```
-GET http://localhost:8080/api/facturas/admin/generadas
-```
-
-Devuelve solo facturas con `estado_factura = 'GENERADA'`
-
-**Ejemplo de respuesta:**
-```json
-[
-  {
-    "idFactura": 2,
-    "idPedido": 2,
-    "rfc": "MEGA880101A23",
-    "razonSocial": "Muebles El Gran Hogar SA de CV",
-    "subtotal": 13534.48,
-    "iva": 2165.52,
-    "total": 15700.00,
-    "estadoFactura": "GENERADA",
-    "fechaEmision": "2024-11-02T11:00:00",
-    "fechaActualizacion": "2024-11-02T16:00:00"
-  }
-]
-```
-
----
-
-#### 7. VER FACTURAS ENVIADAS (ADMIN)
-```
-GET http://localhost:8080/api/facturas/admin/enviadas
-```
-
-Devuelve solo facturas con `estado_factura = 'ENVIADA'`
-
----
-
-#### 8. MARCAR FACTURA COMO GENERADA (ADMIN)
-```
-PUT http://localhost:8080/api/facturas/admin/1/marcar-generada
-```
-
-**Sin body requerido**
-
-**Respuesta Exitosa (200 OK):**
-```json
-{
-  "idFactura": 1,
-  "estadoFactura": "GENERADA",
-  "fechaActualizacion": "2024-11-08T15:45:00"
-}
-```
-
----
-
-#### 9. MARCAR FACTURA COMO ENVIADA (ADMIN)
-```
-PUT http://localhost:8080/api/facturas/admin/1/marcar-enviada
-```
-
-**Sin body requerido**
-
-**Respuesta Exitosa (200 OK):**
-```json
-{
-  "idFactura": 1,
-  "estadoFactura": "ENVIADA",
-  "fechaActualizacion": "2024-11-08T16:00:00"
-}
-```
-
----
-
-#### 10. CAMBIAR ESTADO MANUALMENTE (ADMIN)
-```
-PUT http://localhost:8080/api/facturas/admin/1/cambiar-estado?estado=PENDIENTE
-```
-
-**Query Parameter:**
-- `estado`: PENDIENTE | GENERADA | ENVIADA
-
-**Respuesta Exitosa (200 OK):**
-```json
-{
-  "idFactura": 1,
-  "estadoFactura": "PENDIENTE",
-  "fechaActualizacion": "2024-11-08T16:15:00"
-}
 ```
 
 ---
 
 ## FLUJO DE PRUEBA COMPLETO
 
-### ESCENARIO 1: Cliente Solicita Factura
+### ESCENARIO: Cliente Solicita Factura
 
 1. **Verificar pedidos sin factura**
 ```
@@ -345,36 +224,13 @@ GET http://localhost:8080/api/facturas/pedido/3
 4. **Ver todas las facturas del usuario**
 ```
 GET http://localhost:8080/api/facturas/usuario/2
-# Debe mostrar 2 facturas
+# Debe mostrar 2 facturas (la original + la nueva)
 ```
 
----
-
-### ESCENARIO 2: Admin Procesa Facturas
-
-1. **Ver facturas pendientes**
+5. **Ver todas las facturas del sistema (Admin)**
 ```
-GET http://localhost:8080/api/facturas/admin/pendientes
-```
-
-2. **Marcar como generada**
-```
-PUT http://localhost:8080/api/facturas/admin/3/marcar-generada
-```
-
-3. **Ver facturas generadas**
-```
-GET http://localhost:8080/api/facturas/admin/generadas
-```
-
-4. **Marcar como enviada**
-```
-PUT http://localhost:8080/api/facturas/admin/3/marcar-enviada
-```
-
-5. **Ver facturas enviadas**
-```
-GET http://localhost:8080/api/facturas/admin/enviadas
+GET http://localhost:8080/api/facturas/todas
+# Debe mostrar 3 facturas en total
 ```
 
 ---
@@ -392,17 +248,17 @@ GET http://localhost:8080/api/facturas/admin/enviadas
 ### Pedidos
 | ID | Usuario | Total | Estado | ¿Tiene Factura? |
 |----|---------|-------|--------|-----------------|
-| 1 | María López | $11,499 | ENTREGADO | ✅ SÍ (ENVIADA) |
-| 2 | Carlos Martínez | $15,700 | ENTREGADO | ✅ SÍ (GENERADA) |
+| 1 | María López | $11,499 | ENTREGADO | ✅ SÍ |
+| 2 | Carlos Martínez | $15,700 | ENTREGADO | ✅ SÍ |
 | 3 | María López | $20,199 | ENVIADO | ❌ NO |
 | 4 | Pedro Ramírez | $10,700 | PROCESANDO | ❌ NO |
 | 5 | Carlos Martínez | $3,200 | ENTREGADO | ❌ NO |
 
 ### Facturas Existentes
-| ID | Pedido | RFC | Total | Estado |
-|----|--------|-----|-------|--------|
-| 1 | 1 | XAXX010101000 | $11,499 | ENVIADA |
-| 2 | 2 | MEGA880101A23 | $15,700 | GENERADA |
+| ID | Pedido | RFC | Total |
+|----|--------|-----|-------|
+| 1 | 1 | XAXX010101000 | $11,499 |
+| 2 | 2 | MEGA880101A23 | $15,700 |
 
 ---
 
@@ -423,7 +279,7 @@ total = subtotal + iva = $20,199.00 ✓
 
 ### Error: "Connection refused"
 - ✅ Verifica que la aplicación esté corriendo en http://localhost:8080
-- ✅ Revisa los logs de Spring Boot
+- ✅ Revisa los logs de Spring Boot en IntelliJ
 
 ### Error: "Pedido no encontrado"
 - ✅ Usa un ID de pedido que exista en la base de datos (1-5)
@@ -436,6 +292,12 @@ total = subtotal + iva = $20,199.00 ✓
 ### La base de datos está vacía
 - ✅ Ejecuta el script `datos_prueba.sql` en MySQL
 - ✅ Verifica la conexión: `mysql -u root -p` (password: root123)
+
+### Error de compilación: "cannot find symbol: method setPedido"
+- ✅ Instala el plugin de Lombok en IntelliJ
+- ✅ Habilita "Annotation Processing" en IntelliJ
+- ✅ File > Invalidate Caches > Invalidate and Restart
+- ✅ Build > Rebuild Project
 
 ---
 
@@ -464,13 +326,7 @@ curl --location 'http://localhost:8080/api/facturas/usuario/2'
 curl --location 'http://localhost:8080/api/facturas/pedido/1'
 
 # Admin: Ver todas
-curl --location 'http://localhost:8080/api/facturas/admin/todas'
-
-# Admin: Marcar como generada
-curl --location --request PUT 'http://localhost:8080/api/facturas/admin/3/marcar-generada'
-
-# Admin: Marcar como enviada
-curl --location --request PUT 'http://localhost:8080/api/facturas/admin/3/marcar-enviada'
+curl --location 'http://localhost:8080/api/facturas/todas'
 ```
 
 ---
@@ -489,7 +345,7 @@ SELECT
     f.rfc,
     f.razon_social,
     f.total,
-    f.estado_factura,
+    f.fecha_emision,
     p.numero_guia,
     u.nombre,
     u.apellidos
@@ -507,11 +363,15 @@ WHERE f.id_factura IS NULL;
 
 ---
 
-## CONTACTO Y SOPORTE
+## RESUMEN DE ENDPOINTS
 
-Si encuentras algún error o tienes dudas:
-1. Revisa los logs de Spring Boot en la consola
-2. Verifica que MySQL esté corriendo
-3. Confirma que los datos de prueba se cargaron correctamente
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| POST | /api/facturas/solicitar | Crear factura para un pedido |
+| GET | /api/facturas/usuario/{id} | Ver facturas de un usuario |
+| GET | /api/facturas/pedido/{id} | Ver factura de un pedido |
+| GET | /api/facturas/todas | Ver todas las facturas (Admin) |
+
+---
 
 **¡Listo para probar el sistema de facturación!** 🎉

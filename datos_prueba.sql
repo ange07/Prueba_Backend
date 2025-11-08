@@ -112,15 +112,14 @@ INSERT INTO detalles_pedido (cantidad, precio_unitario, subtotal, id_producto, i
 (1, 3200.00, 3200.00, 7, 5);
 
 -- ============================================
--- 9. FACTURAS (Algunas ya generadas)
+-- 9. FACTURAS
 -- ============================================
--- EstadoFactura puede ser: PENDIENTE, GENERADA, ENVIADA
-INSERT INTO facturas (id_pedido, rfc, razon_social, subtotal, iva, total, estado_factura) VALUES
--- Factura generada para pedido 1
-(1, 'XAXX010101000', 'María López Rodríguez', 9912.93, 1586.07, 11499.00, 'ENVIADA'),
+INSERT INTO facturas (id_pedido, rfc, razon_social, subtotal, iva, total) VALUES
+-- Factura para pedido 1
+(1, 'XAXX010101000', 'María López Rodríguez', 9912.93, 1586.07, 11499.00),
 
--- Factura en proceso para pedido 2
-(2, 'MEGA880101A23', 'Muebles El Gran Hogar SA de CV', 13534.48, 2165.52, 15700.00, 'GENERADA');
+-- Factura para pedido 2
+(2, 'MEGA880101A23', 'Muebles El Gran Hogar SA de CV', 13534.48, 2165.52, 15700.00);
 
 -- Los pedidos 3, 4 y 5 NO tienen factura aún (para poder probar la solicitud de facturas)
 
@@ -149,7 +148,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- JOIN direcciones d ON p.id_direccion = d.id_direccion;
 
 -- Verificar facturas con información del pedido:
--- SELECT f.id_factura, f.rfc, f.razon_social, f.total, f.estado_factura, p.id_pedido, p.numero_guia
+-- SELECT f.id_factura, f.rfc, f.razon_social, f.total, f.fecha_emision, p.id_pedido, p.numero_guia
 -- FROM facturas f
 -- JOIN pedidos p ON f.id_pedido = p.id_pedido;
 
@@ -160,11 +159,11 @@ SET FOREIGN_KEY_CHECKS = 1;
 --    POST /api/facturas/solicitar
 --
 -- 2. Usuario con id_usuario = 2 (María López) tiene:
---    - Pedido 1 con factura ENVIADA
+--    - Pedido 1 con factura
 --    - Pedido 3 sin factura (para solicitar)
 --
 -- 3. Usuario con id_usuario = 3 (Carlos Martínez) tiene:
---    - Pedido 2 con factura GENERADA
+--    - Pedido 2 con factura
 --    - Pedido 5 sin factura (para solicitar)
 --
 -- 4. Usuario con id_usuario = 5 (Pedro Ramírez) tiene:

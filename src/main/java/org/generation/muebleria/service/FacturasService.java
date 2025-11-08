@@ -2,7 +2,6 @@ package org.generation.muebleria.service;
 
 import lombok.AllArgsConstructor;
 import org.generation.muebleria.dto.FacturaRequest;
-import org.generation.muebleria.model.EstadoFactura;
 import org.generation.muebleria.model.Facturas;
 import org.generation.muebleria.model.Pedidos;
 import org.generation.muebleria.repository.FacturasRepository;
@@ -69,32 +68,8 @@ public class FacturasService implements IFacturasService {
         factura.setSubtotal(subtotal);
         factura.setIva(iva);
         factura.setTotal(total);
-        factura.setEstadoFactura(EstadoFactura.PENDIENTE);
 
         // 6. Guardar y retornar
-        return facturasRepository.save(factura);
-    }
-
-    @Override
-    public List<Facturas> obtenerFacturasPorEstado(EstadoFactura estado) {
-        return facturasRepository.findByEstadoFactura(estado);
-    }
-
-    @Override
-    public Facturas cambiarEstado(Long idFactura, EstadoFactura nuevoEstado) {
-        // 1. Validar que la factura exista
-        Facturas factura = facturasRepository.findById(idFactura)
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "No existe una factura con ID: " + idFactura));
-
-        // 2. Validar transiciones de estado lógicas (opcional, para MVP puede omitirse)
-        // PENDIENTE -> GENERADA -> ENVIADA (flujo normal)
-        // Pero permitimos cualquier cambio para flexibilidad del admin
-
-        // 3. Actualizar estado
-        factura.setEstadoFactura(nuevoEstado);
-
-        // 4. Guardar y retornar
         return facturasRepository.save(factura);
     }
 

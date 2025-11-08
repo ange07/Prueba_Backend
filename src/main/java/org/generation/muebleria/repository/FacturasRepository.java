@@ -1,6 +1,5 @@
 package org.generation.muebleria.repository;
 
-import org.generation.muebleria.model.EstadoFactura;
 import org.generation.muebleria.model.Facturas;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -28,14 +27,6 @@ public interface FacturasRepository extends JpaRepository<Facturas, Long> {
      * @return Lista de facturas asociadas a ese RFC
      */
     List<Facturas> findByRfc(String rfc);
-
-    /**
-     * Busca todas las facturas con un estado específico.
-     * Útil para que el admin vea facturas PENDIENTES, GENERADAS o ENVIADAS.
-     * @param estado Estado de la factura (PENDIENTE, GENERADA, ENVIADA)
-     * @return Lista de facturas con ese estado
-     */
-    List<Facturas> findByEstadoFactura(EstadoFactura estado);
 
     /**
      * Busca todas las facturas de un usuario específico.
