@@ -15,5 +15,5 @@ public interface IUsuariosService {
     UsuarioResponse desactivarUserById(Long id);
     UsuarioResponse updateUserById(Long id, UsuarioRequest updatedUser);
     boolean validateUser(UsuarioRequest user);
-
+    UsuarioResponse updateUserRole(Long userId, String newRoleName);
 }

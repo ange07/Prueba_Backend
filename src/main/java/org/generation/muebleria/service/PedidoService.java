@@ -24,6 +24,7 @@ import java.time.LocalDateTime; // Importante para las fechas
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -83,13 +84,14 @@ public class PedidoService implements IPedidosService{
 
             // ACTUALIZAR STOCK DEL PRODUCTO
             producto.setStockDisponible(producto.getStockDisponible() - detalleDTO.getCantidad());
-            productoRepository.save(producto);
+//            productoRepository.save(producto);
         }
 
         // 4. FINALIZAR Y GUARDAR PEDIDO
         newPedido.setDetallesPedidos(detallesGuardados);
         newPedido.setCostoEnvio(calcularCostoEnvio(direccion)); // Función auxiliar
         newPedido.setTotal(totalPedido.add(newPedido.getCostoEnvio()));
+        newPedido.setNumeroGuia(generateTrackingNumber());
 
         Pedidos savedPedido = pedidoRepository.save(newPedido);
 
@@ -188,7 +190,10 @@ public class PedidoService implements IPedidosService{
 
         if(pedido.getUsuario() != null){
             UsuarioResponseLite usuDto = new UsuarioResponseLite();
+            usuDto.setIdUsuario(pedido.getUsuario().getIdUsuario());
             usuDto.setNombre(pedido.getUsuario().getNombre());
+            usuDto.setApellidos(pedido.getUsuario().getApellidos());
+            usuDto.setCorreo(pedido.getUsuario().getCorreo());
 
             dto.setUsuario(usuDto);
         }
@@ -255,6 +260,12 @@ public class PedidoService implements IPedidosService{
         }
 
         return dto;
+    }
+
+    private String generateTrackingNumber() {
+        // Usamos el formato UUID para asegurar unicidad
+        // Quitamos los guiones para un formato más limpio, ej: "a1b2c3d4e5f6g7h8"
+        return UUID.randomUUID().toString().replace("-", "").substring(0, 16).toUpperCase();
     }
 
 }

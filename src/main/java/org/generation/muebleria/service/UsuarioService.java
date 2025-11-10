@@ -1,5 +1,6 @@
 package org.generation.muebleria.service;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.generation.muebleria.dto.request.UsuarioRequest;
 import org.generation.muebleria.dto.response.UsuarioResponse;
@@ -26,7 +27,10 @@ public class UsuarioService implements IUsuariosService, UserDetailsService {
     private final UsuariosRepository usuarioRepository;
     private final RolRepository rolRepository;
     private final RolService roleService;
+    //definicion de correo administrador
+    private static final String CORREO_ADMIN = "admin@ecommerce.com";
     public PasswordEncoder passwordEncoder;
+
 
 
     @Override
@@ -51,9 +55,17 @@ public class UsuarioService implements IUsuariosService, UserDetailsService {
             throw new IllegalArgumentException("El correo ya está registrado.");
         }
 
-        // **ASIGNACIÓN DE ROL:** Asignamos el rol por defecto (ROL_CLIENTE)
-        Roles defaultRole = rolRepository.findByNombreRol("CLIENTE") // Asegúrate de que este nombre exista en tu DB
-                .orElseThrow(() -> new RuntimeException("Rol por defecto (CLIENTE) no encontrado. Configuración incompleta."));
+        String asignacionRol;
+        if(CORREO_ADMIN.equalsIgnoreCase(user.getCorreo())){
+            asignacionRol = "ADMINISTRADOR";
+        }else{
+            asignacionRol = "CLIENTE";
+        }
+
+        // Asignamos el rol
+        Roles assignedRole = rolRepository.findByNombreRol(asignacionRol)
+                .orElseThrow(() -> new RuntimeException("Rol "+asignacionRol+" no encontrado"));
+
 
         // Creamos la Entidad que vamos a guardar
         Usuarios newUser = new Usuarios();
@@ -65,7 +77,7 @@ public class UsuarioService implements IUsuariosService, UserDetailsService {
         newUser.setCorreo(user.getCorreo());
 
         // Asignación del rol
-        newUser.setRol(defaultRole);
+        newUser.setRol(assignedRole);
         //encriptar la contraseña que viene del usuario
         String encriptedPassword = passwordEncoder.encode(user.getPassword());
         //fijar la contraseña encriptada al objeto del usuario
@@ -116,6 +128,23 @@ public class UsuarioService implements IUsuariosService, UserDetailsService {
         Usuarios saveOriginal = usuarioRepository.save(orignalInfo);
 
         return mapToResponseDTO(saveOriginal);
+    }
+
+    @Transactional
+    public UsuarioResponse updateUserRole(Long userId, String newRoleName) {
+
+        Usuarios userToUpdate = usuarioRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado con ID: " + userId));
+
+        Roles newRole = rolRepository.findByNombreRol(newRoleName)
+                .orElseThrow(() -> new IllegalArgumentException("Rol '" + newRoleName + "' no existe."));
+
+
+        userToUpdate.setRol(newRole);
+
+        Usuarios savedUser = usuarioRepository.save(userToUpdate);
+
+        return mapToResponseDTO(savedUser);
     }
 
     @Override

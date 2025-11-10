@@ -34,4 +34,10 @@ public class UsuarioController {
     public UsuarioResponse deleteUserById(@PathVariable("userId")Long id){
         return usersService.desactivarUserById(id);
     }
+
+    //security
+    @PutMapping("/admin/{userId}/role")
+    public UsuarioResponse changeUserRole(@PathVariable Long userId, @RequestParam String newRoleName) {
+        return usersService.updateUserRole(userId, newRoleName);
+    }
 }
